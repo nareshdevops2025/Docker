@@ -13,8 +13,6 @@ pipeline {
         BUILD_TAG = "${BUILD_NUMBER}"
         IMAGE_WITH_BUILD = "${DOCKERHUB_USER}/${IMAGE_NAME}:${BUILD_TAG}"
         IMAGE_LATEST = "${DOCKERHUB_USER}/${IMAGE_NAME}:latest"
-		NAMESPACE = "staging"
-	    KUBECONFIG = "C:\\Users\\Hp\\.kube\\config"
 		NAMESPACE = "local"
 	    KUBECONFIG = "C:\\Users\\Hp\\.kube\\config"
     }
