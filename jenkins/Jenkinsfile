@@ -54,21 +54,6 @@ pipeline {
         }
       }
 
-	stage('Tag Image as Latest') {
-            steps {
-			    echo "Tag docker image"     
-                bat "docker tag %IMAGE_WITH_BUILD% %IMAGE_LATEST%"
-            }
-        }
-
-    stage('Docker Build') {
-    steps {
-        dir('application') {
-            echo "Building Docker image"
-                bat "docker build -t %IMAGE_WITH_BUILD% ."
-                     }
-        }
-      }
 
       stage('Tag Image as Latest') {
             steps {
