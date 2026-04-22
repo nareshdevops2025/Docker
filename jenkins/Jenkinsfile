@@ -50,6 +50,8 @@ pipeline {
              dir('application') {
                echo "Building Docker image"
                bat "docker build -t %IMAGE_WITH_BUILD% ."
+				    echo "Push image into dockerhub"
+               bat  'docker push %IMAGE_WITH_BUILD%'
                      }
         }
       }
@@ -73,17 +75,6 @@ pipeline {
                 }
             }
         }
-
-	  stage('Docker Build') {
-         steps {
-             dir('application') {
-               echo "Building Docker image"
-               bat "docker build -t %IMAGE_WITH_BUILD% ."
-			   echo "Push image into dockerhub"
-               bat  'docker push %IMAGE_WITH_BUILD%'
-                     }
-        }
-      }
 	
         stage('Verify kubectl') {
             steps {
