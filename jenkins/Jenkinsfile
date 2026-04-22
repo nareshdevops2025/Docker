@@ -1,0 +1,324 @@
+pipeline {
+  agent any
+	 options {
+        timestamps()
+    }
+  tools {
+        maven 'maven-3'
+        jdk 'JDK'
+    }
+  environment {
+        DOCKERHUB_USER = "nareshbashipangu"
+        IMAGE_NAME = "devops-challenge"
+        BUILD_TAG = "${BUILD_NUMBER}"
+        IMAGE_WITH_BUILD = "${DOCKERHUB_USER}/${IMAGE_NAME}:${BUILD_TAG}"
+<<<<<<< HEAD
+        IMAGE_LATEST = "${DOCKERHUB_USER}/${IMAGE_NAME}:latest"
+<<<<<<< HEAD
+		NAMESPACE = "staging"
+	    KUBECONFIG = "C:\\Users\\Hp\\.kube\\config"
+=======
+>>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
+=======
+		NAMESPACE = "local"
+	    KUBECONFIG = "C:\\Users\\Hp\\.kube\\config"
+>>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
+    }
+  stages {
+
+	stage('Checkout') {
+         steps {
+          echo "Code checkout from github"
+          git branch: 'main',
+            url: 'https://github.com/nareshdevops2025/devops-challenge.git'
+      }
+    }
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
+	stage('Testing') {
+          steps {
+            dir('application') {
+             echo "Unit testing"
+             bat 'mvn test'
+<<<<<<< HEAD
+=======
+     stage('Testing') {
+            steps {
+        dir('application') {
+             echo "maven test"
+                    bat 'mvn test'
+>>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
+=======
+>>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
+                }
+            }
+        }
+
+	stage('Package Build') {
+            steps {
+                dir('application') {
+<<<<<<< HEAD
+<<<<<<< HEAD
+                  echo "Packaging java application"
+=======
+                  echo "packaging java application"
+>>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
+=======
+                  echo "Packaging java application"
+>>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
+                    bat 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+	stage('Docker Build') {
+         steps {
+             dir('application') {
+               echo "Building Docker image"
+               bat "docker build -t %IMAGE_WITH_BUILD% ."
+                     }
+        }
+      }
+
+	stage('Tag Image as Latest') {
+            steps {
+			    echo "Tag docker image"     
+                bat "docker tag %IMAGE_WITH_BUILD% %IMAGE_LATEST%"
+            }
+        }
+=======
+    stage('Docker Build') {
+    steps {
+        dir('application') {
+            echo "Building Docker image"
+                bat "docker build -t %IMAGE_WITH_BUILD% ."
+                     }
+        }
+      }
+
+      stage('Tag Image as Latest') {
+            steps {
+                bat "docker tag %IMAGE_WITH_BUILD% %IMAGE_LATEST%"
+            }
+        }
+
+        stage('DockerHub Login') {
+=======
+	stage('DockerHub Login') {
+>>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
+            steps {
+				echo "Login into dockerhub"
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                }
+            }
+        }
+
+	  stage('Docker Build') {
+         steps {
+             dir('application') {
+               echo "Building Docker image"
+               bat "docker build -t %IMAGE_WITH_BUILD% ."
+			   echo "Push image into dockerhub"
+               bat  'docker push %IMAGE_WITH_BUILD%'
+                     }
+        }
+      }
+	
+        stage('Verify kubectl') {
+            steps {
+                bat 'kubectl version --client'
+            }
+        }
+
+        stage('Verify Kubernetes Context') {
+            steps {
+<<<<<<< HEAD
+                bat "docker images | findstr %IMAGE_NAME%"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Docker image tagged and pushed successfully!"
+        }
+        failure {
+            echo "❌ Docker tagging or push failed"
+        }
+    }
+  
+	  
+	  }
+	  
+        /*stage('Docker Push') {
+            steps {
+                 echo "pushing Docker image to local registry"
+>>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
+
+	stage('DockerHub Login') {
+            steps {
+				echo "Login into dockerhub"
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                }
+            }
+        }
+
+	stage('Push Docker Images') {
+            steps {
+     			echo "Push image into dockerhub"
+                bat """
+                docker push %IMAGE_WITH_BUILD%
+                docker push %IMAGE_LATEST%
+                """
+            }
+        }
+<<<<<<< HEAD
+
+	stage('Verify Tags') {
+              steps {
+				echo "Verify image tag"
+                bat "docker images | findstr %IMAGE_NAME%"
+=======
+        
+ stage('Terraform Init') {
+    steps {
+          dir('terraform') {
+            echo "terraform initialization"
+              sh 'terraform init'
+            }
+        }
+          }
+    }
+}
+  
+      stage('Terraform Init') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform init'
+                }
+>>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
+            }
+        }
+
+        stage('Verify kubectl') {
+            steps {
+                bat 'kubectl version --client'
+            }
+        }
+
+        stage('Verify Kubernetes Context') {
+            steps {
+                bat 'kubectl config get-contexts'
+=======
+                bat 'kubectl config get-contexts'
+            }
+        }
+
+        stage('Switch to Minikube Context') {
+            steps {
+                bat 'kubectl config use-context minikube'
+            }
+        }
+
+        stage('Verify Cluster Access') {
+            steps {
+                bat 'kubectl get nodes'
+>>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
+            }
+        }
+    
+	
+	stage('Create Namespace') {
+            steps {
+				echo "Create namespace in Minikube"
+                bat 'kubectl create namespace %NAMESPACE% --dry-run=client -o yaml | kubectl apply -f -'
+                      }
+        }
+
+<<<<<<< HEAD
+        stage('Switch to Minikube Context') {
+            steps {
+                bat 'kubectl config use-context minikube'
+            }
+        }
+
+        stage('Verify Cluster Access') {
+            steps {
+                bat 'kubectl get nodes'
+            }
+        }
+<<<<<<< HEAD
+    
+	
+	stage('Create Namespace') {
+            steps {
+				echo "Create namespace in Minikube"
+                bat 'kubectl create namespace %NAMESPACE% --dry-run=client -o yaml | kubectl apply -f -'
+                      }
+        }
+
+	stage('Deploy Application') {
+            steps {
+				echo "Deploy application in kubernetes namespace in Minikube"
+                bat 'kubectl apply -n %NAMESPACE% -f kubernetes/deployment.yaml'
+                bat 'kubectl apply -n %NAMESPACE% -f kubernetes/service.yaml'
+            
+            }
+        }
+
+	stage('Verify Rollout') {
+            steps {
+			   echo "Verify rollout"
+               bat 'kubectl rollout status deployment/devops-challenge -n %NAMESPACE%'
+               bat 'kubectl get pods -n %NAMESPACE%'
+               bat 'kubectl get svc -n %NAMESPACE%'
+            }
+        }
+    
+   
+  
+	}  
+	  }
+=======
+=======
+	stage('Deploy Application') {
+            steps {
+				echo "Deploy application in kubernetes namespace in Minikube"
+                bat 'kubectl apply -n %NAMESPACE% -f kubernetes/deployment.yaml'
+                bat 'kubectl apply -n %NAMESPACE% -f kubernetes/service.yaml'
+>>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
+            
+            }
+        }
+
+<<<<<<< HEAD
+ */
+>>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
+=======
+	stage('Verify Rollout') {
+            steps {
+			   echo "Verify rollout"
+               bat 'kubectl rollout restart deployment devops-challenge -n %NAMESPACE%'
+               bat 'kubectl rollout status deployment/devops-challenge -n %NAMESPACE% --timeout=10m'
+               bat 'kubectl get pods -n %NAMESPACE%'
+               bat 'kubectl get svc -n %NAMESPACE%'
+            }
+        }
+	}  
+	  }
+>>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc

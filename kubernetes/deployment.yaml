@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-challenge
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devops-challenge
+  template:
+    metadata:
+      labels:
+        app: devops-challenge
+    spec:
+      containers:
+      - name: devops-challenge
+        image: devops-challenge
+        imagePullPolicy: IfNotPresent
+        ports:
+<<<<<<< HEAD
+        - containerPort: 9900
+=======
+        - containerPort: 8080
+>>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc

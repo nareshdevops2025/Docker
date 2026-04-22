@@ -1,0 +1,126 @@
+🧪 DevOps Home Challenge – Infrastructure, CI/CD & Kubernetes Deployment
+
+1# 🎯 Objective
+
+Design and provision infrastructure using **Terraform**, build a secure CI/CD pipeline using **Jenkins**, and deploy a containerized application to **Kubernetes** using **manifests or Helm**.
+- **💻 Local**: Docker Desktop + Minikube (recommended for universal access)
+
+
+2# 📦 Scope Overview
+
+- Build infrastructure using Terraform local
+- Set up a Jenkins-based CI/CD pipeline
+- Containerize and deploy a sample application using Kubernetes
+- Integrate security tools for IaC and image scanning
+- Document and present your solution in a technical walkthrough
+
+## 🏗️ Part 1 – Infrastructure as Code with Terraform
+
+### 🔨 Choose Your Path
+
+#### 💻 **Option B: Local Setup (Recommended)**
+*Choose this for a fully local development experience*
+
+**Infrastructure Requirements:**
+- Docker Desktop with Kubernetes enabled
+- Minikube cluster setup via Terraform
+- Local Jenkins instance (Docker container)
+- Local Docker registry
+- Terraform state stored locally or in Git
+
+**Local Setup Benefits:**
+- No AWS costs or account requirements
+- Faster iteration and testing
+- Complete control over environment
+- Same DevOps principles and practices
+
+### 📋 **Common Requirements (Both Paths)**
+
+i. **Terraform Best Practices:**
+   - Modular structure with reusable modules
+   - Variables, outputs, and proper state management
+   - Version locking and dependency handling
+   - Environment separation (dev/staging/prod)
+
+ii. **IaC Security:**
+   - Integrate `tfsec` or `checkov` for Terraform scanning
+   - Fail pipeline on critical misconfigurations
+   - Document security decisions and exceptions
+
+iii. **Documentation:**
+   - Clear setup instructions for your chosen path
+   - Architecture diagrams
+   - Resource inventory and costs (if using AWS)
+
+## 🚀 Part 2 – CI/CD with Jenkins
+
+### 🔧 Jenkins Setup Options
+
+#### 💻 **Local Path**: Jenkins in Docker container
+
+```bash
+# Local Jenkins setup example
+docker run -d -p 8080:8080 -p 50000:50000 \
+  -v jenkins_home:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  --name jenkins jenkins/jenkins:lts
+```
+
+### 📋 Pipeline Requirements (6 Stages)
+
+1. **Code Checkout**
+   - Pull source code from Git
+   - Set up workspace and environment variables
+
+2. **Static Code Analysis**
+   - Scan Terraform code using `tfsec` or `checkov`
+   - Optional: Application code scan (SonarQube, ESLint, etc.)
+   - Generate security reports
+
+3. **Docker Build & Push**
+   - Build Docker image for sample application
+   - Tag with build number and commit hash
+   - Push to registry (DockerHub for cloud, local registry for local setup)
+
+4. **Image Security Scanning**
+   - Scan container images with `Trivy` or `Grype`
+   - Check for vulnerabilities and compliance
+   - Generate security reports
+
+5. **Deployment**
+   - Deploy to Kubernetes cluster
+   - Support both Helm charts and YAML manifests
+   - Implement environment promotion (dev → staging → prod)
+   - Manual approval gates for production
+
+6. **Rollback Capability**
+   - Version-based rollback using Git tags
+   - Helm revision rollback
+   - Database migration rollback (if applicable)
+
+## ☸️ Part 3 – Kubernetes Deployment
+
+### 🎯 **Deployment Options**
+
+Choose **ONE** of the following approaches:
+
+**Option A: YAML Manifests**
+*Recommended for learning Kubernetes fundamentals*
+- Raw Kubernetes YAML files
+- Direct control over all resources
+- Good for understanding K8s concepts
+
+**Option B: Helm Charts**
+*Recommended for production-like experience*
+- Templated deployments
+- Package management
+- Easy upgrades and rollbacks
+
+### 📋 **Required Deliverables**
+
+#### **Code & Configuration**
+- Complete Terraform infrastructure code
+- Jenkins pipeline configuration (Jenkinsfile)
+- Kubernetes manifests or Helm charts
+- Sample application with Dockerfile
+- All supporting scripts and configurations
