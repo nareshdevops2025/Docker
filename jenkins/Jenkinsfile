@@ -9,20 +9,14 @@ pipeline {
     }
   environment {
         DOCKERHUB_USER = "nareshbashipangu"
-        IMAGE_NAME = "devops-challenge"
+        IMAGE_NAME = "docker-demo"
         BUILD_TAG = "${BUILD_NUMBER}"
         IMAGE_WITH_BUILD = "${DOCKERHUB_USER}/${IMAGE_NAME}:${BUILD_TAG}"
-<<<<<<< HEAD
         IMAGE_LATEST = "${DOCKERHUB_USER}/${IMAGE_NAME}:latest"
-<<<<<<< HEAD
 		NAMESPACE = "staging"
 	    KUBECONFIG = "C:\\Users\\Hp\\.kube\\config"
-=======
->>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
-=======
 		NAMESPACE = "local"
 	    KUBECONFIG = "C:\\Users\\Hp\\.kube\\config"
->>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
     }
   stages {
 
@@ -30,29 +24,22 @@ pipeline {
          steps {
           echo "Code checkout from github"
           git branch: 'main',
-            url: 'https://github.com/nareshdevops2025/devops-challenge.git'
+            url: 'https://github.com/nareshdevops2025/Docker.git'
       }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
 	stage('Testing') {
           steps {
             dir('application') {
              echo "Unit testing"
              bat 'mvn test'
-<<<<<<< HEAD
-=======
+
      stage('Testing') {
             steps {
         dir('application') {
              echo "maven test"
                     bat 'mvn test'
->>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
-=======
->>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
+
                 }
             }
         }
@@ -60,22 +47,12 @@ pipeline {
 	stage('Package Build') {
             steps {
                 dir('application') {
-<<<<<<< HEAD
-<<<<<<< HEAD
                   echo "Packaging java application"
-=======
-                  echo "packaging java application"
->>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
-=======
-                  echo "Packaging java application"
->>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
                     bat 'mvn clean package -DskipTests'
                 }
             }
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 	stage('Docker Build') {
          steps {
              dir('application') {
@@ -91,7 +68,7 @@ pipeline {
                 bat "docker tag %IMAGE_WITH_BUILD% %IMAGE_LATEST%"
             }
         }
-=======
+
     stage('Docker Build') {
     steps {
         dir('application') {
@@ -107,10 +84,7 @@ pipeline {
             }
         }
 
-        stage('DockerHub Login') {
-=======
-	stage('DockerHub Login') {
->>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
+       	stage('DockerHub Login') {
             steps {
 				echo "Login into dockerhub"
                 withCredentials([usernamePassword(
@@ -142,7 +116,6 @@ pipeline {
 
         stage('Verify Kubernetes Context') {
             steps {
-<<<<<<< HEAD
                 bat "docker images | findstr %IMAGE_NAME%"
             }
         }
@@ -163,7 +136,6 @@ pipeline {
         /*stage('Docker Push') {
             steps {
                  echo "pushing Docker image to local registry"
->>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
 
 	stage('DockerHub Login') {
             steps {
@@ -187,14 +159,11 @@ pipeline {
                 """
             }
         }
-<<<<<<< HEAD
 
 	stage('Verify Tags') {
               steps {
 				echo "Verify image tag"
-                bat "docker images | findstr %IMAGE_NAME%"
-=======
-        
+                bat "docker images | findstr %IMAGE_NAME%"        
  stage('Terraform Init') {
     steps {
           dir('terraform') {
@@ -211,7 +180,6 @@ pipeline {
                 dir('terraform') {
                     sh 'terraform init'
                 }
->>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
             }
         }
 
@@ -223,9 +191,7 @@ pipeline {
 
         stage('Verify Kubernetes Context') {
             steps {
-                bat 'kubectl config get-contexts'
-=======
-                bat 'kubectl config get-contexts'
+                  bat 'kubectl config get-contexts'
             }
         }
 
@@ -238,7 +204,6 @@ pipeline {
         stage('Verify Cluster Access') {
             steps {
                 bat 'kubectl get nodes'
->>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
             }
         }
     
@@ -250,7 +215,6 @@ pipeline {
                       }
         }
 
-<<<<<<< HEAD
         stage('Switch to Minikube Context') {
             steps {
                 bat 'kubectl config use-context minikube'
@@ -261,9 +225,7 @@ pipeline {
             steps {
                 bat 'kubectl get nodes'
             }
-        }
-<<<<<<< HEAD
-    
+        }    
 	
 	stage('Create Namespace') {
             steps {
@@ -294,22 +256,17 @@ pipeline {
   
 	}  
 	  }
-=======
-=======
+
 	stage('Deploy Application') {
             steps {
 				echo "Deploy application in kubernetes namespace in Minikube"
                 bat 'kubectl apply -n %NAMESPACE% -f kubernetes/deployment.yaml'
                 bat 'kubectl apply -n %NAMESPACE% -f kubernetes/service.yaml'
->>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
             
             }
         }
 
-<<<<<<< HEAD
- */
->>>>>>> 7dbc22341bb0f703bf722f3b22e48de091d1f35a
-=======
+
 	stage('Verify Rollout') {
             steps {
 			   echo "Verify rollout"
@@ -321,4 +278,3 @@ pipeline {
         }
 	}  
 	  }
->>>>>>> cfd2a899e9698073c732ad2be2d3665e2bffe2bc
