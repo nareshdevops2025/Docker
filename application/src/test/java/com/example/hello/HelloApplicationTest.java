@@ -44,6 +44,6 @@ public class HelloApplicationTest {
     void helloEndpointReturnsExpectedMessage() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Hello Naresh, this is test method"));
+                .andExpect(content().string("Hello Naresh, welcome to Kubernetes world"));
     }
 }
